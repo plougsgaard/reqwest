@@ -112,8 +112,10 @@
     // breaks cross-origin requests with legacy browsers
     if (!o['crossOrigin'] && !headers[requestedWith]) headers[requestedWith] = defaultHeaders['requestedWith']
     if (!headers[contentType] && !isAFormData) headers[contentType] = o['contentType'] || defaultHeaders['contentType']
-    for (h in headers)
+    for (h in headers) {
+      if (Array.isArray(o.excludedHeaders) && o.excludedHeaders.indexOf(h) != -1) continue;
       headers.hasOwnProperty(h) && 'setRequestHeader' in http && http.setRequestHeader(h, headers[h])
+    }
   }
 
   function setCredentials(http, o) {
